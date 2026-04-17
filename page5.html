@@ -283,6 +283,7 @@
 
     .page-out{animation:pageOut 0.4s ease forwards!important;}
     @keyframes pageOut{to{opacity:0;transform:translateY(-14px);}}
+    @keyframes ptsBounce{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
   </style>
 </head>
 <body>
@@ -295,12 +296,15 @@
   <div class="content">
 
     <!-- ① 대박선물 2탄 헤더 -->
-    <div class="gift-header">
+    <div class="gift-header" style="flex-direction:column;align-items:center;text-align:center;">
+      <div style="margin-bottom:8px;">
+        <span style="display:inline-block;font-family:var(--main-font);font-size:13px;color:#FFD700;background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.35);padding:5px 18px;border-radius:100px;letter-spacing:2px;">✦ Step 3. 대박선물 2탄 ✦</span>
+      </div>
       <div class="gift-lottie-area">
         <span class="gift-lottie-icon">🎁</span>
         <span class="gift-lottie-label">대박선물<br>2탄</span>
       </div>
-      <div class="gift-header-text">
+      <div class="gift-header-text" style="padding:0;margin-top:8px;">
         <div class="gift-header-title">대박선물 2탄</div>
       </div>
     </div>
@@ -345,19 +349,14 @@
           <span>목표 <strong style="color:#FFD86E">200P</strong> · 매월 28일</span>
         </div>
       </div>
-    </div>
 
-    <!-- ⑤ 푸터 화살표 섹션 -->
-    <div class="footer-teaser">
-      <div class="footer-arrow">⬇</div>
-      <div class="footer-q">
-        퍼즐 그림을 빨리 맞추려면 어떻게 해야 할까?<br>
-        <span class="highlight">포인트를 쌓아야 겠네 💡</span><br>
-        미션 말고 또 포인트를 어떻게 쌓지?
+      <!-- 포인트 강조 -->
+      <div style="margin-top:18px;text-align:center;">
+        <div style="font-family:var(--main-font);font-size:13px;color:rgba(200,220,255,0.7);margin-bottom:6px;">내 탐험 포인트</div>
+        <div id="big-pts" style="font-family:var(--title-font);font-size:clamp(52px,14vw,72px);color:#FFD700;line-height:1;animation:ptsBounce 1.5s ease-in-out infinite;text-shadow:0 0 30px rgba(255,200,0,0.6);">0</div>
+        <div style="font-family:var(--main-font);font-size:18px;color:#FFD86E;margin-top:2px;">포인트 ⭐</div>
       </div>
-      <div class="more-btn" onclick="goNext()">
-        🔍 궁금하면 눌러봐! →
-      </div>
+
     </div>
 
   </div><!-- /.content -->
@@ -400,6 +399,9 @@ function initPuzzle(){
   document.getElementById('prog-pct').textContent=pct+'%';
   document.getElementById('prog-fill').style.width=pct+'%';
   document.getElementById('puzzle-month-badge').textContent='6월의 퍼즐';
+  // 큰 포인트 숫자 업데이트
+  var bigPts = document.getElementById('big-pts');
+  if(bigPts) bigPts.textContent = pts;
 
   /* 퍼즐 그리드 16조각 */
   var grid=document.getElementById('puzzle-grid');
