@@ -7,16 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* 교보손글씨체 */
-    @font-face {
-      font-family: 'KyoboHand';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff') format('woff');
-      font-weight: normal;
-      font-style: normal;
-    }
     :root {
-      --title-font: 'KyoboHand', sans-serif;
-      --main-font: 'Jua', sans-serif;
       --green:   #1D9E75;
       --green2:  #5DCAA5;
       --green3:  #E1F5EE;
@@ -37,7 +28,7 @@
 
     html, body {
       height: 100%;
-      font-family: var(--main-font);
+      font-family: 'Noto Sans KR', sans-serif;
       background: #0B0E2A;
       overflow-x: hidden;
     }
@@ -173,7 +164,7 @@
     }
 
     .title-main {
-      font-family: var(--title-font);
+      font-family: 'Jua', sans-serif;
       font-size: clamp(26px, 7vw, 32px);
       line-height: 1.25;
       color: #FFFFFF;
@@ -195,7 +186,7 @@
     }
 
     .title-brand {
-      font-family: var(--title-font);
+      font-family: 'Jua', sans-serif;
       font-size: clamp(30px, 8.5vw, 38px);
       color: #fff;
       line-height: 1.1;
@@ -418,26 +409,6 @@
     @keyframes pageOut {
       to { opacity: 0; transform: scale(1.03); }
     }
-
-    /* ── NAV BAR ── */
-    .nav-bar {
-      position: fixed; bottom: 24px; left: 0; right: 0;
-      z-index: 100; display: flex; justify-content: center;
-      gap: 14px; padding: 0 24px; pointer-events: none;
-    }
-    .nav-btn {
-      pointer-events: auto;
-      display: flex; align-items: center; gap: 6px;
-      background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.18); border-radius: 100px;
-      padding: 10px 22px; font-family: 'Jua', sans-serif;
-      font-size: 14px; color: #fff; cursor: pointer;
-      transition: transform 0.15s, background 0.15s;
-      flex: 1; max-width: 160px; justify-content: center;
-    }
-    .nav-btn:active { transform: scale(0.95); }
-    .nav-btn.prev { background: rgba(255,255,255,0.06); opacity: 0.4; pointer-events: none; }
-    .nav-btn.next { background: rgba(29,158,117,0.3); border-color: rgba(93,202,165,0.35); }
   </style>
 </head>
 <body>
@@ -607,12 +578,6 @@
 
   </div><!-- /.content -->
 </div><!-- /.scene -->
-
-  <!-- NAV -->
-  <div class="nav-bar">
-    <button class="nav-btn prev">← 이전</button>
-    <button class="nav-btn next" onclick="startAdventure()">다음 →</button>
-  </div>
 
 <script>
   // ── Star field canvas ──

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>튼튼탐험대 — 오늘의 미션</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'KyoboHand';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff') format('woff');
+      font-weight: normal; font-style: normal;
+    }
+    :root { --title-font:'KyoboHand',sans-serif; --main-font:'Jua',sans-serif; }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+    html, body {
+      width:100%; height:100%;
+      font-family: var(--main-font);
+      background: #04061A;
+      overflow-x: hidden;
+    }
+
+    .scene {
+      min-height: 100vh;
+      position: relative;
+      display: flex; flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── 별 ── */
+    #star-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+    /* ── 유성 ── */
+    .shoot { position:fixed; width:80px; height:1.5px; background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,0.8)); border-radius:2px; left:-90px; z-index:1; pointer-events:none; }
+    .sh1{top:5%; animation:sh 7s linear 1s infinite;}
+    .sh2{top:12%;animation:sh 10s linear 6s infinite;}
+    @keyframes sh{from{transform:translateX(0) rotate(18deg);opacity:1;}to{transform:translateX(120vw) rotate(18deg);opacity:0;}}
+
+    /* ── 화성 표면 ── */
+    .mars-surface {
+      position: fixed; bottom:0;
+      left:50%; transform:translateX(-50%);
+      width: 160vw; height: 28vh;
+      z-index: 2; pointer-events: none;
+    }
+
+    /* ── 콘텐츠 ── */
+    .content {
+      position: relative; z-index: 10;
+      width: 100%; max-width: 430px;
+      padding: 0 16px 120px;
+    }
+
+    /* ── 헤더 ── */
+    .page-header {
+      margin-top: 3vh;
+      text-align: center;
+      animation: fadeDown 0.5s ease both;
+    }
+    @keyframes fadeDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+    .header-badge {
+      display: inline-block;
+      background: rgba(216,90,48,0.2);
+      border: 1px solid rgba(216,90,48,0.4);
+      color: #FFB89A; font-family: var(--main-font);
+      font-size: 13px; padding: 5px 16px; border-radius: 100px;
+      margin-bottom: 10px;
+    }
+    .page-title {
+      font-family: var(--title-font);
+      font-size: clamp(24px, 6vw, 30px);
+      color: #fff; line-height: 1.2;
+      text-shadow: 0 0 20px rgba(255,150,100,0.5);
+    }
+    .page-sub {
+      font-family: var(--main-font);
+      font-size: 13px; color: rgba(255,200,180,0.8);
+      margin-top: 6px;
+    }
+
+    /* ── 포인트 안내 배너 ── */
+    .point-banner {
+      margin-top: 2vh;
+      background: rgba(216,90,48,0.12);
+      border: 1px solid rgba(216,90,48,0.3);
+      border-radius: 14px; padding: 10px 16px;
+      display: flex; align-items: center; gap: 10px;
+      animation: fadeUp 0.5s ease 0.1s both;
+    }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+    .point-banner-icon { font-size: 22px; }
+    .point-banner-text { font-family: var(--main-font); font-size: 13px; color: rgba(255,210,190,0.9); line-height: 1.5; }
+    .point-banner-text strong { color: #FFB060; }
+
+    /* ── 미션 리스트 ── */
+    .mission-list {
+      margin-top: 2vh;
+      display: flex; flex-direction: column; gap: 10px;
+      animation: fadeUp 0.5s ease 0.15s both;
+    }
+
+    .mission-item {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 14px 16px;
+      display: flex; align-items: center; gap: 12px;
+      transition: background 0.2s;
+      backdrop-filter: blur(6px);
+    }
+    .mission-item.done {
+      background: rgba(29,158,117,0.15);
+      border-color: rgba(93,202,165,0.3);
+    }
+
+    .mi-icon { font-size: 28px; flex-shrink: 0; }
+    .mi-text { flex: 1; }
+    .mi-title {
+      font-family: var(--main-font);
+      font-size: 15px; color: #fff; line-height: 1.2;
+    }
+    .mi-sub {
+      font-family: var(--main-font);
+      font-size: 11px; color: rgba(200,220,255,0.55);
+      margin-top: 2px;
+    }
+    .mi-right {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 5px; flex-shrink: 0;
+    }
+    .mi-btn-row { display: flex; gap: 5px; }
+    .mi-pt {
+      font-family: var(--main-font);
+      font-size: 13px; font-weight: bold;
+      color: #FFD86E;
+      background: rgba(255,216,110,0.15);
+      border: 1px solid rgba(255,216,110,0.3);
+      border-radius: 100px; padding: 2px 10px;
+    }
+    .m-btn {
+      font-family: var(--main-font); font-size: 12px;
+      background: rgba(29,158,117,0.35);
+      border: 1px solid rgba(93,202,165,0.4);
+      color: #fff; border-radius: 100px;
+      padding: 5px 14px; cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .m-btn:active { transform: scale(0.95); }
+    .m-btn.done {
+      background: rgba(93,202,165,0.2);
+      border-color: rgba(93,202,165,0.3);
+      color: rgba(255,255,255,0.6);
+      pointer-events: none;
+    }
+    .c-btn {
+      font-family: var(--main-font); font-size: 12px;
+      background: rgba(226,75,74,0.25);
+      border: 1px solid rgba(226,75,74,0.4);
+      color: #fff; border-radius: 100px;
+      padding: 5px 10px; cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+      white-space: nowrap;
+      display: none;
+    }
+    .c-btn.visible { display: block; }
+    .c-btn:active { transform: scale(0.95); }
+
+    /* ── 총 포인트 표시 ── */
+    .total-pts {
+      margin-top: 16px;
+      text-align: center;
+      font-family: var(--main-font);
+      font-size: 15px; color: rgba(200,220,255,0.8);
+      animation: fadeUp 0.5s ease 0.2s both;
+      padding: 18px 20px;
+      background: rgba(255,216,110,0.08);
+      border: 1px solid rgba(255,216,110,0.2);
+      border-radius: 18px;
+      backdrop-filter: blur(6px);
+    }
+    .total-pts-label { margin-bottom: 6px; }
+    .total-pts-num {
+      font-size: 52px;
+      color: #FFD86E;
+      text-shadow: 0 0 20px rgba(255,216,110,0.7), 0 0 40px rgba(255,180,0,0.4);
+      animation: ptsPulse 2s ease-in-out infinite;
+      display: block; line-height: 1.1;
+    }
+    @keyframes ptsPulse {
+      0%,100% { transform: scale(1); text-shadow: 0 0 20px rgba(255,216,110,0.7), 0 0 40px rgba(255,180,0,0.4); }
+      50%      { transform: scale(1.08); text-shadow: 0 0 30px rgba(255,216,110,1), 0 0 60px rgba(255,180,0,0.7); }
+    }
+    .total-pts-p { font-size: 22px; color: rgba(255,216,110,0.8); }
+
+    /* ── Padlet 인증 카드 ── */
+    .padlet-card {
+      margin-top: 2.5vh;
+      background: rgba(29,158,117,0.12);
+      border: 1.5px solid rgba(93,202,165,0.3);
+      border-radius: 18px; padding: 18px 16px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      animation: fadeUp 0.5s ease 0.25s both;
+    }
+    .padlet-card-top {
+      display: flex; align-items: center; gap: 10px; width: 100%;
+    }
+    .padlet-icon { font-size: 28px; }
+    .padlet-info { flex: 1; }
+    .padlet-title {
+      font-family: var(--title-font);
+      font-size: 17px; color: #fff;
+    }
+    .padlet-sub {
+      font-family: var(--main-font);
+      font-size: 11px; color: rgba(200,220,255,0.7);
+      margin-top: 3px; line-height: 1.4;
+    }
+    .padlet-btn {
+      display: block; width: 100%;
+      background: linear-gradient(135deg, #1D9E75, #0F6E56);
+      color: #fff; text-decoration: none;
+      text-align: center; border-radius: 12px;
+      padding: 13px; font-family: var(--main-font);
+      font-size: 16px;
+      box-shadow: 0 6px 20px rgba(29,158,117,0.4);
+      transition: transform 0.15s;
+      position: relative; overflow: hidden;
+    }
+    .padlet-btn::before {
+      content: '';
+      position: absolute; top:0; left:-100%; width:100%; height:100%;
+      background: linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+      animation: shimmer 2.5s ease infinite;
+    }
+    @keyframes shimmer{from{left:-100%;}to{left:200%;}}
+    .padlet-btn:active { transform: scale(0.97); }
+
+    /* ── 네비 ── */
+    .nav-bar {
+      position: fixed; bottom:0; left:0; right:0;
+      z-index: 40;
+      display: flex; justify-content: center; gap: 12px;
+      padding: 12px 20px 20px;
+      background: linear-gradient(to top, rgba(4,6,26,0.97) 60%, transparent);
+    }
+    .nav-btn {
+      flex:1; max-width:160px;
+      display:flex; align-items:center; justify-content:center; gap:5px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 100px; padding: 11px 0;
+      font-family: var(--main-font); font-size: 14px; color: #fff;
+      cursor: pointer; transition: transform 0.15s;
+    }
+    .nav-btn:active { transform: scale(0.95); }
+    .nav-btn.prev { background: rgba(255,255,255,0.08); }
+    .nav-btn.next { background: rgba(216,90,48,0.35); border-color: rgba(216,90,48,0.5); }
+
+    /* ── 토스트 ── */
+    .toast {
+      position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+      background: #1D9E75; color: #fff;
+      font-family: var(--main-font); font-size: 14px;
+      padding: 10px 22px; border-radius: 100px;
+      z-index: 100; display: none;
+      box-shadow: 0 4px 16px rgba(29,158,117,0.4);
+      white-space: nowrap;
+    }
+
+    .page-out { animation: pageOut 0.4s ease forwards !important; }
+    @keyframes pageOut { to{opacity:0;transform:translateY(-14px);} }
+  </style>
+</head>
+<body>
+<div class="scene">
+
+  <canvas id="star-canvas"></canvas>
+  <div class="shoot sh1"></div>
+  <div class="shoot sh2"></div>
+  <div class="toast" id="toast"></div>
+
+  <!-- 화성 표면 -->
+  <svg class="mars-surface" viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+    <defs>
+      <radialGradient id="marsGrad" cx="50%" cy="5%" r="95%">
+        <stop offset="0%"   stop-color="#C06040"/>
+        <stop offset="25%"  stop-color="#A04828"/>
+        <stop offset="60%"  stop-color="#7A3018"/>
+        <stop offset="100%" stop-color="#4A1808"/>
+      </radialGradient>
+      <radialGradient id="mc1" cx="38%" cy="32%" r="62%">
+        <stop offset="0%"   stop-color="rgba(40,15,5,0.8)"/>
+        <stop offset="100%" stop-color="rgba(40,15,5,0)"/>
+      </radialGradient>
+      <radialGradient id="mc2" cx="38%" cy="32%" r="62%">
+        <stop offset="0%"   stop-color="rgba(35,12,4,0.65)"/>
+        <stop offset="100%" stop-color="rgba(35,12,4,0)"/>
+      </radialGradient>
+      <filter id="marsRough" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="turbulence" baseFrequency="0.025 0.045" numOctaves="4" seed="5"/>
+        <feDisplacementMap in="SourceGraphic" scale="10" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+      <filter id="mb"><feGaussianBlur stdDeviation="1.5"/></filter>
+    </defs>
+    <!-- 화성 본체 -->
+    <ellipse cx="400" cy="450" rx="780" ry="420" fill="url(#marsGrad)" filter="url(#marsRough)"/>
+    <!-- 어두운 패치 -->
+    <ellipse cx="150" cy="230" rx="90" ry="30" fill="rgba(50,18,6,0.45)" filter="url(#mb)" transform="rotate(-6,150,230)"/>
+    <ellipse cx="580" cy="215" rx="70" ry="25" fill="rgba(45,15,5,0.38)" filter="url(#mb)" transform="rotate(5,580,215)"/>
+    <!-- 크레이터 -->
+    <ellipse cx="100" cy="218" rx="48" ry="18" fill="url(#mc1)"/>
+    <ellipse cx="100" cy="210" rx="48" ry="11" fill="none" stroke="rgba(220,140,100,0.45)" stroke-width="2"/>
+    <ellipse cx="580" cy="205" rx="38" ry="14" fill="url(#mc1)"/>
+    <ellipse cx="580" cy="198" rx="38" ry="9"  fill="none" stroke="rgba(215,130,90,0.4)"  stroke-width="1.8"/>
+    <ellipse cx="310" cy="255" rx="24" ry="9"  fill="url(#mc2)"/>
+    <ellipse cx="460" cy="248" rx="18" ry="7"  fill="url(#mc2)"/>
+    <circle  cx="200" cy="242" r="4"  fill="rgba(40,14,4,0.55)"/>
+    <circle  cx="500" cy="235" r="3"  fill="rgba(38,12,3,0.48)"/>
+    <circle  cx="680" cy="225" r="3.5" fill="rgba(40,14,4,0.5)"/>
+    <!-- 지평선 능선 -->
+    <ellipse cx="400" cy="455" rx="760" ry="415" fill="none" stroke="rgba(200,110,70,0.2)" stroke-width="3"/>
+  </svg>
+
+  <!-- 콘텐츠 -->
+  <div class="content">
+
+    <!-- 헤더 -->
+    <div class="page-header">
+      <div class="header-badge">🔥 화성에서 미션 도전!</div>
+      <div class="page-title">오늘의 미션 🚀</div>
+      <div class="page-sub">미션을 완료하면 탐험 포인트가 쌓여요!</div>
+    </div>
+
+    <!-- 포인트 안내 -->
+    <div class="point-banner">
+      <div class="point-banner-icon">⭐</div>
+      <div class="point-banner-text">
+        미션 완료할수록 포인트가 쌓여요!<br>
+        <strong>포인트 = 레벨업 = 깜짝 선물 🎁</strong>
+      </div>
+    </div>
+
+    <!-- 미션 목록 -->
+    <div class="mission-list">
+
+      <div class="mission-item" id="m1">
+        <div class="mi-icon">💧</div>
+        <div class="mi-text">
+          <div class="mi-title">물 6컵 마시기</div>
+          <div class="mi-sub">건강한 수분 섭취</div>
+        </div>
+        <div class="mi-right">
+          <div class="mi-pt">+5P</div>
+          <div class="mi-btn-row">
+            <button class="m-btn" onclick="doMission('m1',5)">완료!</button>
+            <button class="c-btn" id="c-m1" onclick="cancelMission('m1',5)">취소</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mission-item" id="m2">
+        <div class="mi-icon">🥗</div>
+        <div class="mi-text">
+          <div class="mi-title">채소 반찬 먹기</div>
+          <div class="mi-sub">오늘 식사에 채소 포함</div>
+        </div>
+        <div class="mi-right">
+          <div class="mi-pt">+5P</div>
+          <div class="mi-btn-row">
+            <button class="m-btn" onclick="doMission('m2',5)">완료!</button>
+            <button class="c-btn" id="c-m2" onclick="cancelMission('m2',5)">취소</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mission-item" id="m3">
+        <div class="mi-icon">🚶</div>
+        <div class="mi-text">
+          <div class="mi-title">30분 이상 걷기 또는 운동</div>
+          <div class="mi-sub">신체 활동 실천</div>
+        </div>
+        <div class="mi-right">
+          <div class="mi-pt">+20P</div>
+          <div class="mi-btn-row">
+            <button class="m-btn" onclick="doMission('m3',20)">완료!</button>
+            <button class="c-btn" id="c-m3" onclick="cancelMission('m3',20)">취소</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mission-item" id="m4">
+        <div class="mi-icon">🍚</div>
+        <div class="mi-text">
+          <div class="mi-title">아침밥 먹기</div>
+          <div class="mi-sub">하루를 건강하게 시작</div>
+        </div>
+        <div class="mi-right">
+          <div class="mi-pt">+5P</div>
+          <div class="mi-btn-row">
+            <button class="m-btn" onclick="doMission('m4',5)">완료!</button>
+            <button class="c-btn" id="c-m4" onclick="cancelMission('m4',5)">취소</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mission-item" id="m5">
+        <div class="mi-icon">📵</div>
+        <div class="mi-text">
+          <div class="mi-title">스마트폰 2시간 이하</div>
+          <div class="mi-sub">활동적인 생활 유지</div>
+        </div>
+        <div class="mi-right">
+          <div class="mi-pt">+7P</div>
+          <div class="mi-btn-row">
+            <button class="m-btn" onclick="doMission('m5',7)">완료!</button>
+            <button class="c-btn" id="c-m5" onclick="cancelMission('m5',7)">취소</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.mission-list -->
+
+    <!-- 총 포인트 -->
+    <div class="total-pts">
+      <div class="total-pts-label">⭐ 오늘 획득 포인트</div>
+      <span class="total-pts-num" id="today-pts">0</span><span class="total-pts-p">P</span>
+    </div>
+
+    <!-- Padlet 운동 인증 -->
+    <div class="padlet-card">
+      <div class="padlet-card-top">
+        <div class="padlet-icon">🍀</div>
+        <div class="padlet-info">
+          <div class="padlet-title">운동 미션 인증</div>
+          <div class="padlet-sub">매일 저녁 운동 후 Padlet에 인증해요!</div>
+        </div>
+      </div>
+      <a class="padlet-btn"
+         href="https://padlet.com/a01067752602/padlet-il6qwpw58h6dyssw"
+         target="_blank">
+        📌 운동 인증하러 가기 →
+      </a>
+    </div>
+
+  </div><!-- /.content -->
+
+  <!-- 네비 -->
+  <div class="nav-bar">
+    <button class="nav-btn prev" onclick="goPrev()">← 이전</button>
+    <button class="nav-btn next" onclick="goNext()">다음 →</button>
+  </div>
+
+</div><!-- /.scene -->
+
+<script>
+/* 별 */
+(function(){
+  var c=document.getElementById('star-canvas'),ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;draw();}
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    for(var i=0;i<180;i++){
+      var x=Math.random()*c.width, y=Math.random()*c.height;
+      var r=Math.random()*1.5+0.2, a=Math.random()*0.75+0.2;
+      ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,'+a+')';ctx.fill();
+    }
+  }
+  window.addEventListener('resize',resize); resize();
+})();
+
+/* 토스트 */
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.style.display='block';
+  setTimeout(function(){t.style.display='none';},2200);
+}
+
+/* 미션 완료 */
+var missionDone={};
+var todayPts=0;
+
+function doMission(id,pts){
+  if(missionDone[id]) return;
+  missionDone[id]=true;
+  todayPts+=pts;
+  var el=document.getElementById(id);
+  el.classList.add('done');
+  var btn=el.querySelector('.m-btn');
+  btn.textContent='완료 ✓'; btn.classList.add('done');
+  var cbtn=document.getElementById('c-'+id);
+  if(cbtn) cbtn.classList.add('visible');
+  document.getElementById('today-pts').textContent=todayPts;
+  showToast('⭐ +'+pts+'P 획득! 대단해요!');
+  try{
+    var cur=parseInt(localStorage.getItem('tuntun_pts')||'0');
+    localStorage.setItem('tuntun_pts', cur+pts);
+  }catch(e){}
+}
+
+function cancelMission(id,pts){
+  if(!missionDone[id]) return;
+  missionDone[id]=false;
+  todayPts-=pts;
+  var el=document.getElementById(id);
+  el.classList.remove('done');
+  var btn=el.querySelector('.m-btn');
+  btn.textContent='완료!'; btn.classList.remove('done');
+  var cbtn=document.getElementById('c-'+id);
+  if(cbtn) cbtn.classList.remove('visible');
+  document.getElementById('today-pts').textContent=todayPts;
+  showToast('↩ 미션 취소됐어요');
+  try{
+    var cur=parseInt(localStorage.getItem('tuntun_pts')||'0');
+    localStorage.setItem('tuntun_pts', Math.max(0, cur-pts));
+  }catch(e){}
+}
+
+/* 네비 */
+function goPrev(){
+  document.querySelector('.scene').classList.add('page-out');
+  setTimeout(function(){window.location.href='page3.html';},400);
+}
+function goNext(){
+  document.querySelector('.scene').classList.add('page-out');
+  setTimeout(function(){window.location.href='page5.html';},400);
+}
+
+var lt=0;
+document.addEventListener('touchend',function(e){var n=Date.now();if(n-lt<300)e.preventDefault();lt=n;},{passive:false});
+</script>
+</body>
+</html>
