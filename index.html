@@ -68,127 +68,7 @@
     </div>
   </div>
 
-  <!-- 교사용 대시보드 오버레이 -->
-  <div class="dashboard-overlay" id="dashboard-overlay">
-    <div class="dashboard-wrap">
-      <div class="ph" style="position:sticky;top:0;background:#fff;z-index:10;padding-top:8px;border-bottom:0.5px solid #e8e8e8;margin-bottom:14px;">
-        <div class="ph-icon">📊</div>
-        <h2>교사용 대시보드</h2>
-        <button class="close-btn" onclick="closeDashboard()">닫기</button>
-      </div>
 
-      <!-- 요약 통계 -->
-      <div class="dash-stats">
-        <div class="dash-stat">
-          <div class="ds-num" id="ds-total">24</div>
-          <div class="ds-label">전체 학생</div>
-        </div>
-        <div class="dash-stat">
-          <div class="ds-num" id="ds-active">18</div>
-          <div class="ds-label">이번 주 참여</div>
-        </div>
-        <div class="dash-stat">
-          <div class="ds-num" id="ds-levelup">5</div>
-          <div class="ds-label">레벨업 달성</div>
-        </div>
-        <div class="dash-stat">
-          <div class="ds-num" id="ds-avg">340</div>
-          <div class="ds-label">평균 포인트</div>
-        </div>
-      </div>
-
-      <!-- 레벨 분포 -->
-      <div class="dash-section">
-        <div class="dash-section-title">📈 단계별 학생 분포</div>
-        <div class="dash-level-bars">
-          <div class="dlb-row">
-            <span class="dlb-label">🌱 건강새내기</span>
-            <div class="dlb-track"><div class="dlb-fill dlb-s1" style="width:50%"></div></div>
-            <span class="dlb-num">12명</span>
-          </div>
-          <div class="dlb-row">
-            <span class="dlb-label">🧭 튼튼탐험가</span>
-            <div class="dlb-track"><div class="dlb-fill dlb-s2" style="width:33%"></div></div>
-            <span class="dlb-num">8명</span>
-          </div>
-          <div class="dlb-row">
-            <span class="dlb-label">🏅 건강챔피언</span>
-            <div class="dlb-track"><div class="dlb-fill dlb-s3" style="width:12%"></div></div>
-            <span class="dlb-num">3명</span>
-          </div>
-          <div class="dlb-row">
-            <span class="dlb-label">🦸 슈퍼히어로</span>
-            <div class="dlb-track"><div class="dlb-fill dlb-s4" style="width:4%"></div></div>
-            <span class="dlb-num">1명</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 알림 -->
-      <div class="dash-section">
-        <div class="dash-section-title">⚠️ 관찰 필요 학생</div>
-        <div class="dash-alert warn">
-          <span class="da-icon">😴</span>
-          <div class="da-body">
-            <div class="da-name">3주 이상 미참여</div>
-            <div class="da-desc">강도현 · 윤채원 · 오준서 — 개별 독려 필요</div>
-          </div>
-        </div>
-        <div class="dash-alert good">
-          <span class="da-icon">🔥</span>
-          <div class="da-body">
-            <div class="da-name">레벨업 임박</div>
-            <div class="da-desc">김민준 · 이서연 — 이번 주 달성 가능!</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 포인트 수동 지급 -->
-      <div class="dash-section">
-        <div class="dash-section-title">🪙 포인트 수동 지급</div>
-        <div class="dash-grant">
-          <select class="dash-select" id="grant-name">
-            <option value="">학생 선택</option>
-            <option>김민준</option>
-            <option>이서연</option>
-            <option>박지후</option>
-            <option>최수아</option>
-            <option>정하은</option>
-            <option>강도현</option>
-            <option>윤채원</option>
-            <option>오준서</option>
-          </select>
-          <select class="dash-select" id="grant-reason">
-            <option>미션 완료</option>
-            <option>퀴즈 정답</option>
-            <option>개근 보너스</option>
-            <option>레벨업 보너스</option>
-            <option>선생님 재량</option>
-          </select>
-          <div class="dash-grant-row">
-            <input class="dash-input" type="number" id="grant-pt" placeholder="포인트" value="5" min="1" max="100">
-            <button class="dash-grant-btn" onclick="grantPoint()">지급 ➕</button>
-          </div>
-        </div>
-        <div class="grant-log" id="grant-log"></div>
-      </div>
-
-      <!-- 월별 현황 -->
-      <div class="dash-section">
-        <div class="dash-section-title">📅 월별 참여 현황</div>
-        <div class="dash-month-grid">
-          <div class="dmg-cell dmg-done"><div class="dmg-m">6월</div><div class="dmg-v">89%</div></div>
-          <div class="dmg-cell dmg-done"><div class="dmg-m">7월</div><div class="dmg-v">82%</div></div>
-          <div class="dmg-cell dmg-done"><div class="dmg-m">8월</div><div class="dmg-v">76%</div></div>
-          <div class="dmg-cell dmg-now"><div class="dmg-m">9월</div><div class="dmg-v">79%</div></div>
-          <div class="dmg-cell dmg-future"><div class="dmg-m">10월</div><div class="dmg-v">-</div></div>
-          <div class="dmg-cell dmg-future"><div class="dmg-m">11월</div><div class="dmg-v">-</div></div>
-          <div class="dmg-cell dmg-future"><div class="dmg-m">12월</div><div class="dmg-v">-</div></div>
-        </div>
-      </div>
-
-      <button class="dash-logout-btn" onclick="closeDashboard()">대시보드 닫기</button>
-    </div>
   </div>
 
   <!-- 동기부여 문구 배너 — 레벨바 위 -->
@@ -628,6 +508,129 @@
   </div>
 
 </div><!-- /.app -->
+
+  <!-- 교사용 대시보드 오버레이 -->
+  <div class="dashboard-overlay" id="dashboard-overlay">
+    <div class="dashboard-wrap">
+      <div class="ph" style="position:sticky;top:0;background:#fff;z-index:10;padding-top:8px;border-bottom:0.5px solid #e8e8e8;margin-bottom:14px;">
+        <div class="ph-icon">📊</div>
+        <h2>교사용 대시보드</h2>
+        <button class="close-btn" onclick="closeDashboard()">닫기</button>
+      </div>
+
+      <!-- 요약 통계 -->
+      <div class="dash-stats">
+        <div class="dash-stat">
+          <div class="ds-num" id="ds-total">24</div>
+          <div class="ds-label">전체 학생</div>
+        </div>
+        <div class="dash-stat">
+          <div class="ds-num" id="ds-active">18</div>
+          <div class="ds-label">이번 주 참여</div>
+        </div>
+        <div class="dash-stat">
+          <div class="ds-num" id="ds-levelup">5</div>
+          <div class="ds-label">레벨업 달성</div>
+        </div>
+        <div class="dash-stat">
+          <div class="ds-num" id="ds-avg">340</div>
+          <div class="ds-label">평균 포인트</div>
+        </div>
+      </div>
+
+      <!-- 레벨 분포 -->
+      <div class="dash-section">
+        <div class="dash-section-title">📈 단계별 학생 분포</div>
+        <div class="dash-level-bars">
+          <div class="dlb-row">
+            <span class="dlb-label">🌱 건강새내기</span>
+            <div class="dlb-track"><div class="dlb-fill dlb-s1" style="width:50%"></div></div>
+            <span class="dlb-num">12명</span>
+          </div>
+          <div class="dlb-row">
+            <span class="dlb-label">🧭 튼튼탐험가</span>
+            <div class="dlb-track"><div class="dlb-fill dlb-s2" style="width:33%"></div></div>
+            <span class="dlb-num">8명</span>
+          </div>
+          <div class="dlb-row">
+            <span class="dlb-label">🏅 건강챔피언</span>
+            <div class="dlb-track"><div class="dlb-fill dlb-s3" style="width:12%"></div></div>
+            <span class="dlb-num">3명</span>
+          </div>
+          <div class="dlb-row">
+            <span class="dlb-label">🦸 슈퍼히어로</span>
+            <div class="dlb-track"><div class="dlb-fill dlb-s4" style="width:4%"></div></div>
+            <span class="dlb-num">1명</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 알림 -->
+      <div class="dash-section">
+        <div class="dash-section-title">⚠️ 관찰 필요 학생</div>
+        <div class="dash-alert warn">
+          <span class="da-icon">😴</span>
+          <div class="da-body">
+            <div class="da-name">3주 이상 미참여</div>
+            <div class="da-desc">강도현 · 윤채원 · 오준서 — 개별 독려 필요</div>
+          </div>
+        </div>
+        <div class="dash-alert good">
+          <span class="da-icon">🔥</span>
+          <div class="da-body">
+            <div class="da-name">레벨업 임박</div>
+            <div class="da-desc">김민준 · 이서연 — 이번 주 달성 가능!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 포인트 수동 지급 -->
+      <div class="dash-section">
+        <div class="dash-section-title">🪙 포인트 수동 지급</div>
+        <div class="dash-grant">
+          <select class="dash-select" id="grant-name">
+            <option value="">학생 선택</option>
+            <option>김민준</option>
+            <option>이서연</option>
+            <option>박지후</option>
+            <option>최수아</option>
+            <option>정하은</option>
+            <option>강도현</option>
+            <option>윤채원</option>
+            <option>오준서</option>
+          </select>
+          <select class="dash-select" id="grant-reason">
+            <option>미션 완료</option>
+            <option>퀴즈 정답</option>
+            <option>개근 보너스</option>
+            <option>레벨업 보너스</option>
+            <option>선생님 재량</option>
+          </select>
+          <div class="dash-grant-row">
+            <input class="dash-input" type="number" id="grant-pt" placeholder="포인트" value="5" min="1" max="100">
+            <button class="dash-grant-btn" onclick="grantPoint()">지급 ➕</button>
+          </div>
+        </div>
+        <div class="grant-log" id="grant-log"></div>
+      </div>
+
+      <!-- 월별 현황 -->
+      <div class="dash-section">
+        <div class="dash-section-title">📅 월별 참여 현황</div>
+        <div class="dash-month-grid">
+          <div class="dmg-cell dmg-done"><div class="dmg-m">6월</div><div class="dmg-v">89%</div></div>
+          <div class="dmg-cell dmg-done"><div class="dmg-m">7월</div><div class="dmg-v">82%</div></div>
+          <div class="dmg-cell dmg-done"><div class="dmg-m">8월</div><div class="dmg-v">76%</div></div>
+          <div class="dmg-cell dmg-now"><div class="dmg-m">9월</div><div class="dmg-v">79%</div></div>
+          <div class="dmg-cell dmg-future"><div class="dmg-m">10월</div><div class="dmg-v">-</div></div>
+          <div class="dmg-cell dmg-future"><div class="dmg-m">11월</div><div class="dmg-v">-</div></div>
+          <div class="dmg-cell dmg-future"><div class="dmg-m">12월</div><div class="dmg-v">-</div></div>
+        </div>
+      </div>
+
+      <button class="dash-logout-btn" onclick="closeDashboard()">대시보드 닫기</button>
+    </div>
+
 
 <script src="app.js"></script>
 </body>
