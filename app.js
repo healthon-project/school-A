@@ -3,7 +3,7 @@
    =========================== */
 
 /* ── 전역 상태 ── */
-var points      = 20;
+var points      = parseInt(localStorage.getItem('tuntun_points') || '20'); // ✅ 저장된 포인트 불러오기
 var missionDone = {};
 var curMonth    = 6;
 var STORAGE_KEY = 'tuntun_body_records_v2';
@@ -69,6 +69,7 @@ function showToast(msg) {
 function addPoints(n) {
   var before = getLvIdx(points);
   points += n;
+  localStorage.setItem('tuntun_points', points); // ✅ 포인트 저장
   var after = getLvIdx(points);
   updateUI();
   if (after > before) {
