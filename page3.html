@@ -479,11 +479,11 @@
 
       <!-- 탭 -->
       <div class="dash-tabs">
-        <button class="dash-tab active" onclick="switchTab('tab-stats')">📈 현황</button>
-        <button class="dash-tab" onclick="switchTab('tab-bmi')">⚖️ BMI</button>
-        <button class="dash-tab" onclick="switchTab('tab-grant')">🎁 지급</button>
-        <button class="dash-tab" onclick="switchTab('tab-memo')">📝 메모</button>
-        <button class="dash-tab" onclick="switchTab('tab-settings')">⚙️ 설정</button>
+        <button class="dash-tab active" onclick="switchTab('tab-stats',this)">📈 현황</button>
+        <button class="dash-tab" onclick="switchTab('tab-bmi',this)">⚖️ BMI</button>
+        <button class="dash-tab" onclick="switchTab('tab-grant',this)">🎁 지급</button>
+        <button class="dash-tab" onclick="switchTab('tab-memo',this)">📝 메모</button>
+        <button class="dash-tab" onclick="switchTab('tab-settings',this)">⚙️ 설정</button>
       </div>
 
       <!-- 탭1: 현황 -->
@@ -776,11 +776,11 @@ function openDash(){
 }
 function closeDash(){ document.getElementById('dash-panel').classList.remove('open'); }
 
-function switchTab(id){
+function switchTab(id, el){
   document.querySelectorAll('.dash-tab-panel').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.dash-tab').forEach(function(t){t.classList.remove('active');});
   document.getElementById(id).classList.add('active');
-  event.currentTarget.classList.add('active');
+  if(el) el.classList.add('active');
 }
 
 function renderDashStats(){
@@ -803,7 +803,7 @@ function renderLvDist(){
   ];
   var curLvIdx=pts<=2500?0:pts<=5000?1:pts<=7500?2:3;
   var prev=curLvIdx===0?0:levels[curLvIdx-1].max;
-  var next=levels[curLvIdx].max===99999?prev+500:levels[curLvIdx].max;
+  var next=levels[curLvIdx].max===99999?prev+2500:levels[curLvIdx].max;
   var pct=curLvIdx===3?100:Math.min(100,Math.round((pts-prev)/(next-prev)*100));
 
   var html='';
@@ -959,43 +959,7 @@ function printDash(){
   } else { win.document.write('<p>기록 없음</p>'); }
   var memo=localStorage.getItem('tuntun_teacher_memo')||'';
   if(memo){ win.document.write('<h3>📝 교사 메모</h3><pre style="background:#f9f9f9;padding:12px;border-radius:8px;">'+memo+'</pre>'); }
-  win.document.write('
-<!-- ── 학번/이름 재입력 팝업 (GUEST 건너뛴 사람용) ── -->
-<div class="reg-overlay" id="reg-overlay">
-  <div class="reg-box">
-    <div class="reg-icon">🚀</div>
-    <div class="reg-title">잠깐! 학번을 입력해줘 👋</div>
-    <div class="reg-desc">
-      포인트를 제대로 기록하려면<br>
-      <strong>학년반번호</strong>가 필요해요!<br>
-      한 번만 입력하면 다음엔 자동 저장돼요 😊
-    </div>
-    <div class="reg-example">
-      <div class="reg-example-title">📌 이렇게 입력해줘!</div>
-      <div class="reg-example-row">
-        <span>1학년 2반 5번</span><span>→</span>
-        <span class="reg-tag">1205</span>
-      </div>
-      <div class="reg-example-row">
-        <span>3학년 1반 12번</span><span>→</span>
-        <span class="reg-tag">3112</span>
-      </div>
-    </div>
-    <input
-      class="reg-input" id="reg-input"
-      type="number" inputmode="numeric" pattern="[0-9]*"
-      placeholder="예) 1205" maxlength="6"
-    />
-    <div class="reg-hint">학년 + 반 + 번호 숫자만 입력해줘!</div>
-    <div class="reg-err" id="reg-err"></div>
-    <div class="reg-btn-row">
-      <button class="reg-guest-btn" onclick="guestReg()">교사 / 학부모</button>
-      <button class="reg-confirm-btn" onclick="confirmReg()">✅ 입력 완료!</button>
-    </div>
-  </div>
-</div>
-
-</body></html>');
+  win.document.write('\n</body></html>');
   win.document.close();
   win.print();
 }
@@ -1220,5 +1184,41 @@ document.addEventListener('keydown', function(e){
 });
 
 </script>
+<!-- ── 학번/이름 재입력 팝업 (GUEST 건너뛴 사람용) ── -->
+<div class="reg-overlay" id="reg-overlay">
+  <div class="reg-box">
+    <div class="reg-icon">🚀</div>
+    <div class="reg-title">잠깐! 학번을 입력해줘 👋</div>
+    <div class="reg-desc">
+      포인트를 제대로 기록하려면<br>
+      <strong>학년반번호</strong>가 필요해요!<br>
+      한 번만 입력하면 다음엔 자동 저장돼요 😊
+    </div>
+    <div class="reg-example">
+      <div class="reg-example-title">📌 이렇게 입력해줘!</div>
+      <div class="reg-example-row">
+        <span>1학년 2반 5번</span><span>→</span>
+        <span class="reg-tag">1205</span>
+      </div>
+      <div class="reg-example-row">
+        <span>3학년 1반 12번</span><span>→</span>
+        <span class="reg-tag">3112</span>
+      </div>
+    </div>
+    <input
+      class="reg-input" id="reg-input"
+      type="number" inputmode="numeric" pattern="[0-9]*"
+      placeholder="예) 1205" maxlength="6"
+    />
+    <div class="reg-hint">학년 + 반 + 번호 숫자만 입력해줘!</div>
+    <div class="reg-err" id="reg-err"></div>
+    <div class="reg-btn-row">
+      <button class="reg-guest-btn" onclick="guestReg()">교사 / 학부모</button>
+      <button class="reg-confirm-btn" onclick="confirmReg()">✅ 입력 완료!</button>
+    </div>
+  </div>
+</div>
+
+
 </body>
 </html>
